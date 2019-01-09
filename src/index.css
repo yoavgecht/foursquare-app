@@ -12,3 +12,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.counter-venue {
+  border: none;
+  width: 100%;
+}
+
+.text-input-disabled {
+  border: none;
+}
+
+.table {
+  margin-top:40px
+}
+
+.table th {
+  text-align: center;
+}
+
+.search-btn {
+    border-radius: 100px;
+}
+
+.headline {
+  margin-left:16px;
+  margin-bottom:20px;
+  margin-top:20px;
+}
+
+.cell-hovered {
+  background: green;
+}
+
