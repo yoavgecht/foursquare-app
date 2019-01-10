@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class TableHeaders extends Component {
     componentDidUpdate(prevProps) {
         if(this.props.venue !== prevProps.venue){
-            this.props.cleanParticipants();
+            this.props.cleanTable();
         }
         
     }

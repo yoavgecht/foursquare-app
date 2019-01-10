@@ -11,17 +11,17 @@ class Table extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.addParticipant = this.addParticipant.bind(this);
     this.increaseVote = this.increaseVote.bind(this);
-    this.cleanParticipants = this.cleanParticipants.bind(this)
+    this.cleanTable = this.cleanTable.bind(this)
     this.state={ 
         participant: {name: ''}, 
         participants: [],
-        winner:'',
+        winner:null,
         disableAddParticipantBtn: false,
     }
   }
 
-  cleanParticipants() {
-      this.setState({participants: [], disableAddParticipantBtn: false});
+  cleanTable() {
+      this.setState({participants: [], disableAddParticipantBtn: false, winner: null});
   }
 
   renderTableHeaders() {
@@ -32,7 +32,7 @@ class Table extends Component {
             index={index} 
             venue={venue} 
             winner={this.state.winner} 
-            cleanParticipants={this.cleanParticipants} 
+            cleanTable={this.cleanTable} 
             />
         )
     }) 

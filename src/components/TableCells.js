@@ -28,8 +28,8 @@ class TableCells extends Component {
                 <button 
                 onClick={(e) => this.props.increaseVote(e, this.props.rowIndex)}
                 key={this.props.id} 
-                onMouseLeave={(e) => this.handleMouseLeave(e, this.props.rowIndex)}
-                onMouseOver={(e) => this.handleMouseEnter(e, this.props.rowIndex)}
+                onMouseLeave={(e) => this.handleMouseLeave(e)}
+                onMouseOver={(e) => this.handleMouseEnter(e)}
                 disabled={this.props.participants[this.props.rowIndex].name.length < 2 || this.props.participants[this.props.rowIndex].voted } 
                 name={`counterVenue${this.props.index}`} 
                 className={activeCell}></button>
