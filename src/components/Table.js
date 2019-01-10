@@ -17,12 +17,10 @@ class Table extends Component {
         participants: [],
         winner:'',
         disableAddParticipantBtn: false,
-        isHovered: false
     }
   }
 
   cleanParticipants() {
-      debugger;
       this.setState({participants: [], disableAddParticipantBtn: false});
   }
 
@@ -76,17 +74,15 @@ class Table extends Component {
   }
 
   increaseVote(e, index) {
-    debugger;
     let participants = [...this.state.participants];
     participants[index][e.target.name] = participants[index][e.target.name] + 1;
     participants[index].voted = true;
-    this.setState({ participants, disableAddParticipantBtn: false });
+    this.setState({ participants, disableAddParticipantBtn: false});
     var winner = this.calculateWinner();
     this.setState({winner})
   }
 
   calculateWinner(){
-      debugger;
       var venue1 = 0;
       var venue2 = 0;
       var venue3 = 0;
