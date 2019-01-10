@@ -20,19 +20,25 @@ class App extends Component {
    }
 
   getVenues = async (e) => {
+     try {
         e.preventDefault();
         let searchTerm = this.state.searchTerm;
-        let res = await axios.get(`https://api.foursquare.com/v2/venues/search?client_id=VHLN2OXT2Q4JKVW21ACRW4FF1YR0I50WZWQLQMKBLPN1T1J5&v=20170801&query=lunch&near=${searchTerm}&client_secret=OHBZO41UXZWK1B1NEJG2JG2O52DCBSU13TIJSDVWTXXRIH5T&limit=3`);
+        let res = await axios.get(`https://api.foursquare.com/v2/venues/search?client_id=VHLN2OXT2Q4JKVW21ACRW4FF1YR0I50WZWQLQMKBLPN1T1J5&v=20170801&query=
+          lunch&near=${searchTerm}&client_secret=OHBZO41UXZWK1B1NEJG2JG2O52DCBSU13TIJSDVWTXXRIH5T&limit=3`);
         let venues = res.data.response.venues;
         console.log(venues);
         this.setState({venues});
+      } catch (err) {
+        let venues = [];
+        this.setState({venues});
+      }
   }
 
   render() {
     return (
       <div className="container">
           <Search getVenues={this.getVenues} handleSearchInput={this.handleSearchInput} searchTerm={this.state.searchTerm}/>
-          <Table venues={this.state.venues} />
+          <Table venues={this.state.venues} searchTerm={this.state.searchTerm}/>
       </div>
     );
   }

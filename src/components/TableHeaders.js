@@ -9,7 +9,7 @@ class TableHeaders extends Component {
     }
     render() {
         return(
-            <th key={this.props.index}>{this.props.venue.name}{this.props.winner === this.props.venue.name && <div>WINNER!</div>}</th>
+            <th key={this.props.index}>{this.props.venue.name}{this.props.winner === this.props.venue.name && <h4 className="winner">Winner!</h4>}</th>
         ) 
     }
     

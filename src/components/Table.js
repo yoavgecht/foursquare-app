@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AddParticipant from './AddParticipant';
+import AddParticipantBtn from './AddParticipantBtn';
 import AddParticpantTextInput from './AddParticipantTextInput';
 import TableHeaders from './TableHeaders';
 import TableCells from './TableCells';
@@ -11,7 +11,6 @@ class Table extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.addParticipant = this.addParticipant.bind(this);
     this.increaseVote = this.increaseVote.bind(this);
-    this.handleHover = this.handleHover.bind(this);
     this.cleanParticipants = this.cleanParticipants.bind(this)
     this.state={ 
         participant: {name: ''}, 
@@ -30,7 +29,13 @@ class Table extends Component {
   renderTableHeaders() {
     return this.props.venues.map((venue, index) => {
         return (
-            <TableHeaders key={index} index={index} venue={venue} winner={this.state.winner} cleanParticipants={this.cleanParticipants} />
+            <TableHeaders 
+            key={index} 
+            index={index} 
+            venue={venue} 
+            winner={this.state.winner} 
+            cleanParticipants={this.cleanParticipants} 
+            />
         )
     }) 
   }
@@ -38,7 +43,12 @@ class Table extends Component {
   renderTableCells(rowIndex) {
       return this.props.venues.map((venue, index) => {
           return (
-              <TableCells rowIndex={rowIndex} index={index} key={venue.id} name={venue.name} participants={this.state.participants} increaseVote={this.increaseVote}/>
+              <TableCells rowIndex={rowIndex} 
+              index={index} key={venue.id} 
+              name={venue.name} 
+              participants={this.state.participants} 
+              increaseVote={this.increaseVote}
+              />
           )
       })
   }
@@ -75,12 +85,6 @@ class Table extends Component {
     this.setState({winner})
   }
 
-  handleHover() {
-      this.setState(prevState => ({
-        isHovered: !prevState.isHovered
-      }))
-  }
-
   calculateWinner(){
       debugger;
       var venue1 = 0;
@@ -110,8 +114,9 @@ class Table extends Component {
   render(){
     return(
         <div className="row">
-            <div className="col-md-12">
-                {this.props.venues ? <table className="table">
+            {this.props.venues ? <div className="col-md-12 text-center">
+                <div className="wrapper">
+                {this.props.venues.length > 2 ? <table className="table-bordered" cellPadding="0">
                     <tbody>
                         <tr>
                             <th>Participants</th>
@@ -120,16 +125,25 @@ class Table extends Component {
                         {this.state.participants.length > 0 ? this.state.participants.map((participant, index) => {
                             return (
                                 <tr key={index}>
-                                    <AddParticpantTextInput participant={participant} handleInputChange={this.handleInputChange} index={index} participants={this.state.participants}/>
+                                    <AddParticpantTextInput participant={participant} 
+                                    handleInputChange={this.handleInputChange} 
+                                    index={index} 
+                                    participants={this.state.participants}/>
                                     {this.renderTableCells(index)}
                                 </tr>
                             )
                             }) : null}
                     </tbody>
-                </table> : null}
-                {this.props.venues ? <AddParticipant addParticipant={this.addParticipant} participants={this.state.participants} disabled={this.state.disableAddParticipantBtn}/> : null}
-            </div>  
-        </div>
+                </table> : <div>Venues not found</div>}
+                {this.props.venues.length > 2 ? 
+                <AddParticipantBtn 
+                addParticipant={this.addParticipant} 
+                participants={this.state.participants} 
+                disabled={this.state.disableAddParticipantBtn}/> 
+                : null}
+                </div>
+            </div> : null} 
+        </div> 
     )
   }
 }
