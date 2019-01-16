@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import AddParticipantBtn from './AddParticipantBtn';
 import AddParticpantTextInput from './AddParticipantTextInput';
+import { increaseParticipantVote, addParticipant, cleanParticipants} from '../actions/index';
 import TableHeaders from './TableHeaders';
 import TableCells from './TableCells';
 
@@ -9,18 +11,18 @@ class Table extends Component {
     super(props);
     this.renderTableHeaders = this.renderTableHeaders.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.addParticipant = this.addParticipant.bind(this);
     this.increaseVote = this.increaseVote.bind(this);
+    this.handleAddParticipant = this.handleAddParticipant.bind(this);
     this.cleanTable = this.cleanTable.bind(this)
     this.state={ 
-        participant: {name: ''}, 
         participants: [],
         winner:null,
-        disableAddParticipantBtn: false,
+        disableAddParticipantBtn: false
     }
   }
 
   cleanTable() {
+      this.props.cleanParticipants();
       this.setState({participants: [], disableAddParticipantBtn: false, winner: null});
   }
 
@@ -28,7 +30,7 @@ class Table extends Component {
     return this.props.venues.map((venue, index) => {
         return (
             <TableHeaders 
-            key={index} 
+            key={venue.id}
             index={index} 
             venue={venue} 
             winner={this.state.winner} 
@@ -42,44 +44,32 @@ class Table extends Component {
       return this.props.venues.map((venue, index) => {
           return (
               <TableCells rowIndex={rowIndex} 
-              index={index} key={venue.id} 
+              index={index} 
+              key={venue.id} 
               name={venue.name} 
-              participants={this.state.participants} 
+              participants={this.props.participants} 
               increaseVote={this.increaseVote}
               />
           )
       })
   }
 
+  handleAddParticipant(){
+    this.setState({disableAddParticipantBtn : true});
+    this.props.addParticipant();
+  }
+
   handleInputChange(e, index) {
-     let participants = [...this.state.participants];
+     let participants = [...this.props.participants];
      participants[index].name = e.target.value;
      this.setState({ participants })
   }
   
-
-  addParticipant() {
-     let participant = {
-        id: 0,
-        name: '',
-        counterVenue0: 0,
-        counterVenue1: 0,
-        counterVenue2: 0,
-        voted: false
-     }
-     this.setState(prevState => ({
-        participants: [...prevState.participants, participant],
-        disableAddParticipantBtn : true
-    }));
-  }
-
   increaseVote(e, index) {
-    let participants = [...this.state.participants];
-    participants[index][e.target.name] = participants[index][e.target.name] + 1;
-    participants[index].voted = true;
-    this.setState({ participants, disableAddParticipantBtn: false});
+    const name = e.target.name;
+    this.props.increaseParticipantVote(name, index);
     var winner = this.calculateWinner();
-    this.setState({winner})
+    this.setState({disableAddParticipantBtn: false, winner})
   }
 
   calculateWinner(){
@@ -88,11 +78,11 @@ class Table extends Component {
       var venue3 = 0;
       this.state.participants.forEach((participant) => {
         if(participant.counterVenue0 > 0) {
-            venue1 = venue1 + 1;
+            venue1 = ++venue1;
         } else if(participant.counterVenue1 > 0) {
-            venue2 = venue2 + 1;
+            venue2 = ++venue2;
         } else {
-            venue3 = venue3 + 1;
+            venue3 = ++venue3;
         }
       })
 
@@ -118,25 +108,23 @@ class Table extends Component {
                             <th>Participants</th>
                             {this.renderTableHeaders()}
                        </tr>
-                        {this.state.participants.length > 0 ? this.state.participants.map((participant, index) => {
+                        {this.props.participants.length > 0 ? this.props.participants.map((participant, index) => {
                             return (
                                 <tr key={index}>
                                     <AddParticpantTextInput participant={participant} 
                                     handleInputChange={this.handleInputChange} 
                                     index={index} 
-                                    participants={this.state.participants}/>
+                                    participants={this.props.participants}
+                                    />
+
                                     {this.renderTableCells(index)}
                                 </tr>
                             )
                             }) : null}
                     </tbody>
-                </table> : <div>Venues not found</div>}
+                </table> : <div>Venues not found</div>}           
                 {this.props.venues.length > 2 ? 
-                <AddParticipantBtn 
-                addParticipant={this.addParticipant} 
-                participants={this.state.participants} 
-                disabled={this.state.disableAddParticipantBtn}/> 
-                : null}
+                <AddParticipantBtn disableAddParticipantBtn={this.state.disableAddParticipantBtn} handleAddParticipant={this.handleAddParticipant}/> : null}
                 </div>
             </div> : null} 
         </div> 
@@ -144,4 +132,17 @@ class Table extends Component {
   }
 }
 
-export default Table;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    increaseParticipantVote: (name, index) => {dispatch(increaseParticipantVote(name, index))},
+    addParticipant: () => {dispatch(addParticipant())},
+    cleanParticipants: () => {dispatch(cleanParticipants())}
+  }
+}
+
+const mapStateToProps = ({venues, participants}) => {
+    debugger;
+    return {venues, participants}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

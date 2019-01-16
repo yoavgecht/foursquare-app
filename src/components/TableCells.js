@@ -5,29 +5,24 @@ class TableCells extends Component {
 
     handleMouseEnter = (e, rowIndex) => {
         if(!e.currentTarget.disabled) {
-            this.setState(prevState => ({
-            mouseHover: true
-            }));
+            this.setState({mouseHover: true});
         }
         return false;
     }
 
     handleMouseLeave = (e) => {
         if(!e.currentTarget.disabled){
-            this.setState(prevState => ({
-                mouseHover: false
-            }));
+            this.setState({mouseHover: false});
         }
         return false;
     }
 
     render() {
         const activeCell = this.state.mouseHover ? 'active-cell' : 'counter-venue';
-        return(
+        return (
             <td>
                 <button 
                 onClick={(e) => this.props.increaseVote(e, this.props.rowIndex)}
-                key={this.props.id} 
                 onMouseLeave={(e) => this.handleMouseLeave(e)}
                 onMouseOver={(e) => this.handleMouseEnter(e)}
                 disabled={this.props.participants[this.props.rowIndex].name.length < 2 || this.props.participants[this.props.rowIndex].voted } 
@@ -36,7 +31,6 @@ class TableCells extends Component {
             </td>
         ) 
     }
-    
 }
 
 export default TableCells;
